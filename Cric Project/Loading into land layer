@@ -1,0 +1,9 @@
+use schema land_1;
+
+create table if not exists cric_json(
+
+Data variant
+
+);
+
+select * from CRICKET.LAND_1.CRIC_JSON;
