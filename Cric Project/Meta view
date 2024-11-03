@@ -1,0 +1,27 @@
+use database cricket;
+use warehouse cric_m_wh;
+use schema clean_3;
+use role sysadmin;
+
+
+select * from CRICKET.RAW_2.MATCH_RAW_VIEW;
+desc view CRICKET.RAW_2.MATCH_RAW_VIEW;
+
+create or replace view CRIC_META(
+
+data_version,
+created,
+revision,
+"Change Date"
+)
+as 
+select
+
+meta['created']::date as created,
+meta['data_version']::text as data_version,
+meta['revision']::number as revision,
+"Change Date"
+
+from CRICKET.RAW_2.MATCH_RAW_VIEW;
+        
+select * from clean_3.cric_meta;
