@@ -1,0 +1,57 @@
+create or replace table customer(
+id number,
+address varchar,
+salary varchar
+
+);
+create or replace table emp1(
+id number,
+address varchar,
+salary varchar
+
+);
+create or replace table emp2(
+id number,
+address varchar,
+salary varchar
+
+);
+create or replace table emp3(
+id number,
+address varchar,
+salary varchar
+
+);
+
+--insert single value
+insert into customer(id,address,salary) values(122,'ranpal','273939');
+--insert multiple values
+insert into customer(id,address,salary) 
+values
+(167,'korei','7321010'),
+(178,'panikoili','850923850'),
+(187,'sathipur','12791917');
+
+--insert data from one table to another table
+insert into emp1 select * from customer;
+select * from emp1;
+
+--insert data into multiple table  
+insert all into emp1
+            into emp2
+            into emp3 select * from customer;
+
+insert overwrite all into emp1
+            into emp2
+            into emp3 select * from customer;
+
+insert all when salary>=10000 then into emp1
+                else into emp2
+            into emp3
+                select * from customer;
+INSERT ALL
+    WHEN salary >= 10000 THEN INTO emp1
+    ELSE INTO emp2,
+    INTO emp3
+SELECT * FROM customer;
+            
