@@ -1,0 +1,71 @@
+use database cricket;
+use warehouse cric_m_wh;
+use schema clean_3;
+use role sysadmin;
+
+
+select * from CRICKET.RAW_2.MATCH_RAW_VIEW;
+desc view CRICKET.RAW_2.MATCH_RAW_VIEW;
+
+create or replace view CRIC_INFO(
+city,
+"Balls Per Over",
+Gender,
+"Match Type",
+"Match Type Number",
+"Overs",
+Season,
+"Team Type",
+Venue,
+"Match Date",
+"Match Year",
+"Match Month",
+"Match Day",
+"Event Name",
+"Match Event Number",
+"Match Umpires",
+"Reserve Match Umpires",
+"Tv_Umpires",
+Umpires,
+"Winner Team",
+"Win Outcome",
+"Player of Match",
+Match,
+"Toss Decision"
+)
+AS
+select 
+info:city::varchar as city,
+info:balls_per_over::number as "Balls Per Over",
+info:gender::varchar as Gender,
+info:match_type::varchar as "Match Type",
+info:match_type_number::number as "Match Type Number",
+info:overs::number as "Overs",
+info:season::varchar as Season,
+info:team_type::varchar as "Team Type",
+info:venue::varchar as Venue,
+info:dates[0]::date as "Match Date",
+date_part('year',info:dates[0]::date) as "Match Year",
+date_part('month',info:dates[0]::date) as "Match Month",
+date_part('day',info:dates[0]::date) as "Match Day",
+info:event['name']::varchar as "Event Name",
+info:event['match_number']::number as "Match Event Number",
+info:officials:match_referees[0]::varchar as "Match Umpires",
+case 
+when info:officials:reserve_umpires[0]::varchar is not null then info:officials:reserve_umpires[0]::varchar
+when info:officials:reserve_umpires[0]::varchar is null then 'N/A'
+END as "Reserve Match Umpires",
+info:officials:tv_umpires[0]::varchar as "Tv_Umpires",
+info:officials:umpires[0] || ', ' || info:officials:umpires[1] AS Umpires,
+info:outcome['winner']::varchar as "Winner Team",
+COALESCE(
+    'win by '|| info:outcome:by['runs'] ||' runs', 
+    'win by '|| info:outcome:by['wickets'] ||' wickets'
+) AS "Win Outcome",
+info:player_of_match[0]::varchar as "Player of Match",
+info:teams[0]||' vs '||info:teams[1] as Match,
+info:toss['winner'] ||' won the toss and '||info:toss['decision']|| ' first' as "Toss Decision"
+
+from CRICKET.RAW_2.MATCH_RAW_VIEW;
+
+select * from cricket.clean_3.CRIC_INFO;
