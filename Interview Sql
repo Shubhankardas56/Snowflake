@@ -1,0 +1,52 @@
+with recursive emp_manager_hierarchy as(
+
+select employee_id,employee_name,manager_id,employee_name as manager_chain from employee where manager_id is null
+
+union all
+
+select e.employee_id,e.employee_name,e.manager_id,concat(manager_chain,'-->',e.employee_name) as manager_chain
+from employee e inner join emp_manager_hierarchy emh on e.manager_id=emh.employee_id 
+)
+select * from emp_manager_hierarchy;
+
+-----------------------------------------------------------------------
+
+select * from employee;
+
+select e.EMPLOYEE_ID,e.EMPLOYEE_NAME employee_name,m.EMPLOYEE_NAME manager_name,e.MANAGER_ID emp_id,m.manager_id manager_id from employee e join employee m on e.manager_id=m.employee_id;
+
+-- country rank      output
+
+-- canada   2         IND 
+-- swiden   1		  srilanka
+-- ...				  swiden
+-- IND     126		  canada
+-- srilanka 135       usa
+
+create or replace table Country(
+country_name varchar,
+world_rank number
+);
+
+insert into Country (country_name,world_rank) values ('Finland',1),('Denmark',2),('Iceland',3),('Israel',4),('India',122),('Srilanka',110);
+
+select * from country;
+
+select country_name,world_rank from 
+(select *,case when COUNTRY_NAME='India' then 1
+         when COUNTRY_NAME='Srilanka' then 2
+        else 3 end new_worldrank from country) c
+order by NEW_WORLDRANK asc;
+
+-----------------------------
+
+ALTER SESSION SET TIMEZONE = 'Asia/Kolkata';
+select current_date() as today;
+
+-- stock_date  stock_tran  output
+ 
+-- jan          15			15
+ 
+-- feb			55          40
+ 
+-- mar			75			20
