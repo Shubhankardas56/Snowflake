@@ -1,0 +1,26 @@
+use database cricket;
+use role sysadmin;
+use warehouse cric_m_wh;
+
+
+use schema Raw_2;
+select * from CRICKET.LAND_1.CRIC_JSON;
+
+create or replace view Match_raw_view
+(
+      INFO,
+      META,
+      INNINGS,
+     "Change Date"
+)
+as
+select 
+
+data:info::variant as INFO,
+data:meta::object as META,
+data:innings::array as INNINGS,
+current_timestamp as "Change Date"
+
+from CRICKET.LAND_1.CRIC_JSON;
+
+select * from Match_raw_view;
