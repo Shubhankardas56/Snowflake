@@ -1,0 +1,26 @@
+use role sysadmin;
+create database cricket;
+create schema land_1;
+use schema land_1;
+create table if not exists cric_json(
+
+Data variant
+
+);
+
+
+create schema raw_2;
+create schema clean_3;
+create schema consumption_4;
+
+create warehouse Cric_M_WH
+WITH
+warehouse_size='medium'
+warehouse_type='standard'
+auto_suspend=60
+auto_resume=true
+min_cluster_count=1
+max_cluster_count=1
+scaling_policy='standard';
+
+select * from CRICKET.LAND_1.CRIC_JSON;
